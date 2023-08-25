@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;;
 
@@ -25,10 +26,11 @@ public class CliAssignment1 {
         final String PRINT_STATEMENT = "Print Statement";
         final String DELETE_ACOOUNT = "Delete Account";
         String screen = DASHBOARD;
-        int[] idArray = new int[0];
-        double[] balanceArray = new double[0];
+        ArrayList<Integer> idArray = new ArrayList<>();
+        ArrayList<Double> balanceArray = new ArrayList<>();
         String[] nameArray = new String[0];
         int idnum;
+
         boolean valid = true;
         boolean twoValidation = false;
         String[][] details = new String[0][3];
@@ -56,7 +58,8 @@ public class CliAssignment1 {
                     System.out.printf("%s%s%s \n", BLUE_COLOR_BOLD, "[6].Delete Account", RESET);
                     System.out.printf("%s%s%s \n\n", BLUE_COLOR_BOLD, "[7].Exit", RESET);
 
-                    System.out.printf("%s%s%s%s", WHITE_COLOR_BOLD, "Enter an option to continue : ", RESET,LIGHT_BLUE_COLOR_BOLD);
+                    System.out.printf("%s%s%s%s", WHITE_COLOR_BOLD, "Enter an option to continue : ", RESET,
+                            LIGHT_BLUE_COLOR_BOLD);
 
                     int option = scanner.nextInt();
                     scanner.nextLine();
@@ -97,8 +100,9 @@ public class CliAssignment1 {
                 }
                 case CREATE_ACCOUNT: {
 
-                    idnum = idArray.length + 1;
+                    idnum = idArray.size() + 1;
                     valid = false;
+                    idArray.add(idArray.size(), idArray.size() + 1);
                     id = String.format("SDB-%05d", (details.length + 1));
                     System.out.println(id);
                     System.out.printf("%sID\t\t: %s%sSDB-%05d %s \n", WHITE_COLOR_BOLD, RESET, LIGHT_BLUE_COLOR_BOLD,
@@ -130,12 +134,13 @@ public class CliAssignment1 {
                         System.out.printf("%sInitial Deposit\t:%s%s ", WHITE_COLOR_BOLD, RESET, LIGHT_BLUE_COLOR_BOLD);
                         initialDepost = scanner.nextDouble();
                         scanner.nextLine();
+                        // todo : check the balance are numbers
+
                         if (initialDepost < 5000) {
                             System.out.printf("%sInsufficient Amount%s\n", RED_COLOR_BOLD, RESET);
                             twoValidation = true;
                             continue;
                         }
-
 
                     } while (twoValidation);
                     String[][] newDetails = new String[details.length + 1][3];
@@ -147,14 +152,14 @@ public class CliAssignment1 {
 
                     }
 
-                    newDetails[newDetails.length - 1][0] = id; 
-                    newDetails[newDetails.length-1][1] = name;
+                    newDetails[newDetails.length - 1][0] = id;
+                    newDetails[newDetails.length - 1][1] = name;
                     newDetails[newDetails.length - 1][2] = String.valueOf(initialDepost);
                     details = newDetails;
-                    System.out.println(Arrays.toString(details[details.length-1]));
+                    System.out.println(Arrays.toString(details[details.length - 1]));
                     System.out.printf("\n%sID : %s%s Name : %s has been created successfully. %s\n\n",
                             GREEN_COLOR_BOLD, "SDK-",
-                            id, details[details.length-1][2], RESET);
+                            id, details[details.length - 1][1], RESET);
 
                     System.out.printf("%sDo you want to add new student (Y/n)?  : %s%s ", WHITE_COLOR_BOLD, RESET,
                             LIGHT_BLUE_COLOR_BOLD);
@@ -162,19 +167,215 @@ public class CliAssignment1 {
                     if (secondOption.equals("Y")) {
                         screen = CREATE_ACCOUNT;
                         valid = true;
+                        break;
 
                     } else {
                         screen = DASHBOARD;
                         valid = true;
+                        break;
                     }
 
                 }
-                
+                case DEPOSITE: {
+                    do {
+                        System.out.printf("%sEnter A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET, LIGHT_BLUE_COLOR_BOLD);
+                        String accounntNumber = scanner.nextLine();
+                        boolean validateId = true;
+                        int indexOfId = 0;
 
+                        for (int indexOfAaNumber : idArray) {
+                            if ((String.format("SDB-%05d", indexOfAaNumber).equals(accounntNumber))) {
+                                validateId = false;
+                                break;
+
+                            }
+                            indexOfId++;
+                        }
+                        if (validateId == true) {
+                            System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD, RESET);
+                            continue;
+                        }
+                        ;
+                        System.out.printf("%sCurrent Balance: \t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD, details[indexOfId][2]);
+                        System.out.printf("%sDeposite Ammount: \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                        Double depositeAmmount = scanner.nextDouble();
+                        scanner.nextLine();
+                        System.out.printf("%sNew Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD,
+                                (depositeAmmount + Double.valueOf(details[indexOfId][2])));
+                        details[indexOfId][2] = String.valueOf(depositeAmmount + Double.valueOf(details[indexOfId][2]));
+                        System.out.printf("%sDo you want to continue (Y/n): \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                        valid = false;
+                        String thirdOption = scanner.nextLine().strip().toUpperCase();
+                        if (thirdOption.equals("Y")) {
+                            screen = DEPOSITE;
+                            valid = true;
+                            break;
+
+                        } else {
+                            screen = DASHBOARD;
+                            valid = true;
+                            break;
+                        }
+
+                    } while (valid);
+
+                }
+                case WITHDRAWAL: {
+                    do {
+                        System.out.printf("%sEnter A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET, LIGHT_BLUE_COLOR_BOLD);
+                        String accounntNumber = scanner.nextLine();
+                        boolean validateId = true;
+                        int indexOfId = 0;
+
+                        for (int indexOfAaNumber : idArray) {
+                            if ((String.format("SDB-%05d", indexOfAaNumber).equals(accounntNumber))) {
+                                validateId = false;
+                                break;
+
+                            }
+                            indexOfId++;
+                        }
+                        if (validateId == true) {
+                            System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD, RESET);
+                            continue;
+                        }
+                        ;
+                        System.out.printf("%sCurrent Balance: \t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD, details[indexOfId][2]);
+
+                        boolean validationOfWithdrawal;
+                        Double withdrawalAmount;
+
+                        do {
+
+                            validationOfWithdrawal = false;
+                            System.out.printf("%sWithdrawal Ammount: \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                    LIGHT_BLUE_COLOR_BOLD);
+                            withdrawalAmount = scanner.nextDouble();
+                            scanner.nextLine();
+                            if (Double.valueOf(details[indexOfId][2]) - withdrawalAmount < 500) {
+                                System.out.printf("Insuficiant balance.", RED_COLOR_BOLD, RESET);
+                                valid = true;
+                                screen = DASHBOARD;
+
+                            }
+                            if (withdrawalAmount < 100) {
+                                System.out.printf("%sMinimun withdrawal amount is Rs.100.%s\n", RED_COLOR_BOLD, RESET);
+                                validationOfWithdrawal = true;
+                            }
+
+                        } while (validationOfWithdrawal);
+
+                        System.out.printf("%sNew Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD,
+                                (Double.valueOf(details[indexOfId][2]) - withdrawalAmount));
+                        details[indexOfId][2] = String
+                                .valueOf(Double.valueOf(details[indexOfId][2]) - withdrawalAmount);
+                        System.out.printf("%sDo you want to continue (Y/n): \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                        valid = false;
+                        String thirdOption = scanner.nextLine().strip().toUpperCase();
+                        if (thirdOption.equals("Y")) {
+                            screen = WITHDRAWAL;
+                            valid = true;
+                            break;
+
+                        } else {
+                            screen = DASHBOARD;
+                            valid = true;
+                            break;
+                        }
+
+                    } while (valid);
+                }
+                case TRANSFER: {
+                    do {
+                        int indexOfId = 0;
+                        int fronIndex;
+                        int toIndex;
+                        boolean validateId = true;
+                        do{
+                            System.out.printf("%sEnter from A/C No: \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                            String fromAccountNo = scanner.nextLine();
+                            
+
+                            for (int indexOfAcNumber : idArray) {
+                                if ((String.format("SDB-%05d", indexOfAcNumber).equals(fromAccountNo))) {
+                                    fronIndex = indexOfId;
+                                    validateId = false;
+                                    fronIndex = indexOfId;
+                                    //break;
+
+                                }
+                                indexOfId++;
+                            }
+                            if (validateId == true) {
+                                System.out.printf("%sInvalid %s number.%s\n", RED_COLOR_BOLD, fromAccountNo, RESET);
+                                continue;
+                            }
+                        
+                        } while (validateId);
+
+                        do{
+                            System.out.printf("%sEnter to A/C No: \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                            String toAccountNo = scanner.nextLine();
+                        
+                        
+                            indexOfId = 0;
+                            fronIndex=0;
+                            validateId = true;
+                            indexOfId = 0;
+                            for (int indexOfAcNumber : idArray) {
+                                if ((String.format("SDB-%05d", indexOfAcNumber).equals(toAccountNo))) {
+                                    indexOfAcNumber = indexOfId;
+                                    validateId = false;
+                                    toIndex = indexOfId;
+                                    //break;
+
+                                }
+                                indexOfId++;
+                            }
+                            if (validateId == true) {
+                                System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD,  RESET);
+                                continue;
+                            }
+                        } while (false);
+                        System.out.printf("%sFrom A/C No: \t\t: %s%s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD,details[fronIndex][3]);
+
+                        
+                        
+                        
+                        
+                    } while (true);
+
+                }
 
             }
 
         } while (valid);
     }
+
+    // public int[] accValidation(String fromAcc, String toAcc, int[] detailsArray) {
+    //     int count = 0;
+    //     int[] accNoValidationData= new int[2];
+    //     for ( int indexOfAaNumber : detailsArray) {
+    //         if ((String.format("SDB-%05d", indexOfAaNumber).equals(fromAcc))
+    //                 || (String.format("SDB-%05d", indexOfAaNumber).equals(toAcc))) {
+    //             int index1 = (String.format("SDB-%05d", indexOfAaNumber).equals(fromAcc)) ? 0 : 1;
+    //             accNoValidationData[index1] = index1;
+    //             count++;
+    //         }
+            
+    //     }
+    // }
+    
+   
 
 }
