@@ -164,7 +164,7 @@ public class CliAssignment1 {
                     System.out.printf("%sDo you want to add new student (Y/n)?  : %s%s ", WHITE_COLOR_BOLD, RESET,
                             LIGHT_BLUE_COLOR_BOLD);
                     String secondOption = scanner.nextLine().strip().toUpperCase();
-                    if (secondOption.equals("N")) {
+                    if (secondOption.equals("Y")) {
                         screen = CREATE_ACCOUNT;
                         valid = true;
                         break;
@@ -210,7 +210,7 @@ public class CliAssignment1 {
                                 LIGHT_BLUE_COLOR_BOLD);
                         valid = false;
                         String thirdOption = scanner.nextLine().strip().toUpperCase();
-                        if (thirdOption.equals("N")) {
+                        if (thirdOption.equals("Y")) {
                             screen = DEPOSITE;
                             valid = true;
                             break;
@@ -279,7 +279,7 @@ public class CliAssignment1 {
                                 LIGHT_BLUE_COLOR_BOLD);
                         valid = false;
                         String thirdOption = scanner.nextLine().strip().toUpperCase();
-                        if (thirdOption.equals("N")) {
+                        if (thirdOption.equals("Y")) {
                             screen = WITHDRAWAL;
                             valid = true;
                             break;
@@ -293,121 +293,138 @@ public class CliAssignment1 {
                     } while (valid);
                 }
                 case TRANSFER: {
-                    
-                        int indexOfId = 0;
-                        int fronIndex;
-                        int toIndex;
-                        boolean validateId = true;
-                        do{
-                            System.out.printf("%sEnter from A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
+
+                    int indexOfId = 0;
+                    int fronIndex;
+                    int toIndex;
+                    boolean validateId = true;
+                    do {
+                        System.out.printf("%sEnter from A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
                                 LIGHT_BLUE_COLOR_BOLD);
-                            String fromAccountNo = scanner.nextLine();
-                            
+                        String fromAccountNo = scanner.nextLine();
 
-                            for (int indexOfAcNumber : idArray) {
-                                if ((String.format("SDB-%05d", indexOfAcNumber).equals(fromAccountNo))) {
-                                    fronIndex = indexOfId;
-                                    validateId = false;
-                                    fronIndex = indexOfId;
-                                    //break;
-
-                                }
-                                indexOfId++;
-                            }
-                            if (validateId == true) {
-                                System.out.printf("%sInvalid %s number.%s\n", RED_COLOR_BOLD, fromAccountNo, RESET);
-                                continue;
-                            }
-                        
-                        } while (validateId);
-
-                        do{
-                            System.out.printf("%sEnter to A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD);
-                            String toAccountNo = scanner.nextLine();
-                        
-                        
-                            indexOfId = 0;
-                            fronIndex=0;
-                            validateId = true;
-                            indexOfId = 0;
-                            toIndex = 0;
-                            for (int indexOfAcNumber : idArray) {
-                                if ((String.format("SDB-%05d", indexOfAcNumber).equals(toAccountNo))) {
-                                    indexOfAcNumber = indexOfId;
-                                    validateId = false;
-                                    toIndex = indexOfId;
-                                    //break;
-
-                                }
-                                indexOfId++;
-                            }
-                            if (validateId == true) {
-                                System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD,  RESET);
-                                continue;
-                            }
-                        } while (false);
-                        System.out.printf("%sFrom A/C Name: \t\t\t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,details[fronIndex][1]);
-
-                        System.out.printf("%sFrom A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,
-                                (Double.valueOf(details[fronIndex][2])));
-                        System.out.printf("%sTo A/C Name: \t\t\t: %s%s%s\n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,details[toIndex][1]);
-
-                        System.out.printf("%sTo A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,
-                                (Double.valueOf(details[toIndex][2])));
-                        boolean validationOfTransfer;
-                        double transferAmount;
-                        do {
-
-                            validationOfTransfer = false;
-                            System.out.printf("%sEnter transfer amount: \t\t\t: %s%s", WHITE_COLOR_BOLD, RESET,
-                                    LIGHT_BLUE_COLOR_BOLD);
-                            transferAmount = scanner.nextDouble();
-                            scanner.nextLine();
-                            if (Double.valueOf(details[fronIndex][2]) - transferAmount < 500) {
-                                System.out.printf("Insuficiant balance.", RED_COLOR_BOLD, RESET);
-                                valid = true;
-                                screen = DASHBOARD;
+                        for (int indexOfAcNumber : idArray) {
+                            if ((String.format("SDB-%05d", indexOfAcNumber).equals(fromAccountNo))) {
+                                fronIndex = indexOfId;
+                                validateId = false;
+                                fronIndex = indexOfId;
+                                //break;
 
                             }
-                            if (transferAmount < 100) {
-                                System.out.printf("%sMinimun transfer amount is Rs.100.%s\n", RED_COLOR_BOLD, RESET);
-                                validationOfTransfer = true;
-                            }
-
-                        } while (validationOfTransfer);
-                        System.out.printf("%sNew from A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,
-                                (Double.valueOf(details[fronIndex][2]) - transferAmount - 0.02 * transferAmount));
-                        details[fronIndex][2] = String
-                                .valueOf(Double.valueOf(details[fronIndex][2]) - transferAmount - 0.02 * transferAmount);
-                        System.out.printf("%sNew to A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD,
-                                (Double.valueOf(details[toIndex][2])));
-                        details[toIndex][2]=String
-                                .valueOf(Double.valueOf(details[toIndex][2]) );
-                        System.out.printf("%sDo you want to continue (Y/n) \t: %s%s", WHITE_COLOR_BOLD, RESET,
-                                LIGHT_BLUE_COLOR_BOLD);
-                        valid = false;
-                        String fourthOption = scanner.nextLine().strip().toUpperCase();
-                        if (fourthOption.equals("N")) {
-                            screen = TRANSFER;
-                            valid = true;
-                            break;
-
-                        } else {
-                            screen = DASHBOARD;
-                            valid = true;
-                            break;
+                            indexOfId++;
                         }
-                        
-                        
-                    
+                        if (validateId == true) {
+                            System.out.printf("%sInvalid %s number.%s\n", RED_COLOR_BOLD, fromAccountNo, RESET);
+                            continue;
+                        }
 
+                    } while (validateId);
+
+                    do {
+                        System.out.printf("%sEnter to A/C No: \t\t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                        String toAccountNo = scanner.nextLine();
+
+                        indexOfId = 0;
+                        fronIndex = 0;
+                        validateId = true;
+                        indexOfId = 0;
+                        toIndex = 0;
+                        for (int indexOfAcNumber : idArray) {
+                            if ((String.format("SDB-%05d", indexOfAcNumber).equals(toAccountNo))) {
+                                indexOfAcNumber = indexOfId;
+                                validateId = false;
+                                toIndex = indexOfId;
+                                //break;
+
+                            }
+                            indexOfId++;
+                        }
+                        if (validateId == true) {
+                            System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD, RESET);
+                            continue;
+                        }
+                    } while (false);
+                    System.out.printf("%sFrom A/C Name: \t\t\t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD, details[fronIndex][1]);
+
+                    System.out.printf("%sFrom A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD,
+                            (Double.valueOf(details[fronIndex][2])));
+                    System.out.printf("%sTo A/C Name: \t\t\t: %s%s%s\n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD, details[toIndex][1]);
+
+                    System.out.printf("%sTo A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD,
+                            (Double.valueOf(details[toIndex][2])));
+                    boolean validationOfTransfer;
+                    double transferAmount;
+                    do {
+
+                        validationOfTransfer = false;
+                        System.out.printf("%sEnter transfer amount: \t\t\t: %s%s", WHITE_COLOR_BOLD, RESET,
+                                LIGHT_BLUE_COLOR_BOLD);
+                        transferAmount = scanner.nextDouble();
+                        scanner.nextLine();
+                        if (Double.valueOf(details[fronIndex][2]) - transferAmount < 500) {
+                            System.out.printf("Insuficiant balance.", RED_COLOR_BOLD, RESET);
+                            valid = true;
+                            screen = DASHBOARD;
+
+                        }
+                        if (transferAmount < 100) {
+                            System.out.printf("%sMinimun transfer amount is Rs.100.%s\n", RED_COLOR_BOLD, RESET);
+                            validationOfTransfer = true;
+                        }
+
+                    } while (validationOfTransfer);
+                    System.out.printf("%sNew from A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD,
+                            (Double.valueOf(details[fronIndex][2]) - transferAmount - 0.02 * transferAmount));
+                    details[fronIndex][2] = String
+                            .valueOf(Double.valueOf(details[fronIndex][2]) - transferAmount - 0.02 * transferAmount);
+                    System.out.printf("%sNew to A/C Balance: \t\t: %s%s%.2f\n", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD,
+                            (Double.valueOf(details[toIndex][2])));
+                    details[toIndex][2] = String
+                            .valueOf(Double.valueOf(details[toIndex][2]));
+                    System.out.printf("%sDo you want to continue (Y/n) \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD);
+                    valid = false;
+                    String fourthOption = scanner.nextLine().strip().toUpperCase();
+                    if (fourthOption.equals("Y")) {
+                        screen = TRANSFER;
+                        valid = true;
+                        break;
+
+                    } else {
+                        screen = DASHBOARD;
+                        valid = true;
+                        break;
+                    }
+
+                }
+                case PRINT_STATEMENT: {
+
+                    printStatement(details, idArray);
+                    System.out.printf("%s\nDo you want to continue (Y/n) \t: %s%s", WHITE_COLOR_BOLD, RESET,
+                            LIGHT_BLUE_COLOR_BOLD);
+                    valid = false;
+                    String thirdOption = scanner.nextLine().strip().toUpperCase();
+                    if (thirdOption.equals("Y")) {
+                        screen = PRINT_STATEMENT;
+                        valid = true;
+                        break;
+
+                    } else {
+                        screen = DASHBOARD;
+                        valid = true;
+                        break;
+                    }
+
+                }
+                case DELETE_ACOOUNT: {
+                    
                 }
 
             }
@@ -415,20 +432,51 @@ public class CliAssignment1 {
         } while (valid);
     }
 
-    // public int[] accValidation(String fromAcc, String toAcc, int[] detailsArray) {
-    //     int count = 0;
-    //     int[] accNoValidationData= new int[2];
-    //     for ( int indexOfAaNumber : detailsArray) {
-    //         if ((String.format("SDB-%05d", indexOfAaNumber).equals(fromAcc))
-    //                 || (String.format("SDB-%05d", indexOfAaNumber).equals(toAcc))) {
-    //             int index1 = (String.format("SDB-%05d", indexOfAaNumber).equals(fromAcc)) ? 0 : 1;
-    //             accNoValidationData[index1] = index1;
-    //             count++;
-    //         }
+    public static void printStatement(String[][] detailsArray,ArrayList<Integer> idArray) {
+        final String CLEAR = "\033[H\033[2J";
+        final String LIGHT_BLUE_COLOR_BOLD = "\033[36;1m";
+        final String PURPLE_COLOR_BOLD = "\033[35;1m";
+        final String GREEN_COLOR_BOLD = "\033[32;1m";
+        final String WHITE_COLOR_BOLD = "\033[37;1m";
+        final String BLUE_COLOR_BOLD = "\033[34;1m";
+        final String YELLOW_COLOR_BOLD = "\033[33;1m";
+        final String RED_COLOR_BOLD = "\033[31;1m";
+
+        final String RESET = "\033[0m";
+        do {
+
+            System.out.printf("%sEnter A/C No \t\t\t: %s%s", WHITE_COLOR_BOLD, RESET, LIGHT_BLUE_COLOR_BOLD);
+            String accounntNumber = scanner.nextLine();
+
+            boolean validateId = true;
+            int indexOfUser=0;
+            int indexOfId = 0;
+
+            for (int indexOfAaNumber : idArray) {
+                if ((String.format("SDB-%05d", indexOfAaNumber).equals(accounntNumber))) {
+                    validateId = false;
+                    indexOfUser = indexOfId;
+
+                    break;
+
+                }
+                indexOfId++;
+            }
+            if (validateId == true) {
+                System.out.printf("%sInvalid ID number.%s\n", RED_COLOR_BOLD, RESET);
+                continue;
+            }
+            System.out.printf("%sName \t\t\t\t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
+                    LIGHT_BLUE_COLOR_BOLD, detailsArray[indexOfUser][1]);
+            System.out.printf("%sCurrent Balance \t\t: %s%s%s \n", WHITE_COLOR_BOLD, RESET,
+                    LIGHT_BLUE_COLOR_BOLD, detailsArray[indexOfUser][2]);
+                    
             
-    //     }
-    // }
-    
-   
+            // boolean validationOfWithdrawal;
+            // Double withdrawalAmount;
+        } while (false);
+        
+    }
+
 
 }
